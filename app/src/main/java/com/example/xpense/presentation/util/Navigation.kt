@@ -1,28 +1,4 @@
-/**
- *
- *	MIT License
- *
- *	Copyright (c) 2023 Gautam Hazarika
- *
- *	Permission is hereby granted, free of charge, to any person obtaining a copy
- *	of this software and associated documentation files (the "Software"), to deal
- *	in the Software without restriction, including without limitation the rights
- *	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *	copies of the Software, and to permit persons to whom the Software is
- *	furnished to do so, subject to the following conditions:
- *
- *	The above copyright notice and this permission notice shall be included in all
- *	copies or substantial portions of the Software.
- *
- *	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *	SOFTWARE.
- *
- **/
+
 
 package com.example.xpense.presentation.util
 
@@ -30,8 +6,10 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBalanceWallet
 import androidx.compose.material.icons.filled.Assignment
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -51,8 +29,10 @@ import androidx.navigation.navArgument
 import com.example.xpense.presentation.about.About
 import com.example.xpense.presentation.add_edit_transaction.AddEditTransaction
 import com.example.xpense.presentation.dashboard.Dashboard
+import com.example.xpense.presentation.profile.Profile
 import com.example.xpense.presentation.transaction_details.TransactionDetails
 import com.example.xpense.presentation.transactions.Transactions
+import com.example.xpense.presentation.wallet.Wallet
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -65,7 +45,7 @@ fun SetupNavigation() {
 
     Scaffold(
         bottomBar = {
-            if (currentRoute == Screen.Dashboard.route || currentRoute == Screen.Transactions.route) {
+            if (currentRoute == Screen.Dashboard.route || currentRoute == Screen.Transactions.route|| currentRoute==Screen.WalletScreen.route ||currentRoute==Screen.ProfileScreen.route) {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.BottomCenter
@@ -157,6 +137,12 @@ fun NavigationGraph(navController: NavHostController) {
         ) {
             Transactions(navHostController = navController)
         }
+        composable(route=Screen.WalletScreen.route){
+         Wallet()
+        }
+        composable(route=Screen.ProfileScreen.route){
+            Profile()
+        }
 
     }
 }
@@ -167,12 +153,12 @@ fun BottomBar(navController: NavHostController) {
     val currentRoute = navBackStackEntry?.destination?.route
 
     BottomNavigation(
-        backgroundColor = Color(0xFFE4AEC5)
-
+        backgroundColor = Color.White,
+        elevation = 8.dp
     ) {
+        // Dashboard Item
         BottomNavigationItem(
-            icon =
-            {
+            icon = {
                 Icon(
                     imageVector = Icons.Filled.Home,
                     contentDescription = stringResource(com.example.xpense.R.string.dashboard),
@@ -181,38 +167,50 @@ fun BottomBar(navController: NavHostController) {
             label = {
                 Text(text = "Dashboard")
             },
-
-
             selectedContentColor = Color(0xFF243D25),
-            unselectedContentColor = Color.White,
+            unselectedContentColor = Color.Gray,
             alwaysShowLabel = false,
             selected = currentRoute == Screen.Dashboard.route,
-
             onClick = {
                 navController.navigate(Screen.Dashboard.route) {
-                    // Pop up to the start destination of the graph to
-                    // avoid building up a large stack of destinations
-                    // on the back stack as users select items
                     popUpTo(navController.graph.findStartDestination().id) {
                         saveState = true
                     }
-                    // Avoid multiple copies of the same destination when
-                    // re-selecting the same item
                     launchSingleTop = true
-                    // Restore state when re-selecting a previously selected item
                     restoreState = true
                 }
             }
         )
 
-        Row() {
-            Spacer(modifier = Modifier.width(56.dp))
-        }
-
-
+        // Wallet Item (Newly Added)
         BottomNavigationItem(
-            icon =
-            {
+            icon = {
+                Icon(
+                    imageVector = Icons.Filled.AccountBalanceWallet,
+                    contentDescription = stringResource(com.example.xpense.R.string.wallet),
+                )
+            },
+            label = {
+                Text(text = "Wallet")
+            },
+            selectedContentColor = Color(0xFF243D25),
+            unselectedContentColor = Color.Gray,
+            alwaysShowLabel = false,
+            selected = currentRoute == Screen.WalletScreen.route, // Update the route if needed
+            onClick = {
+                navController.navigate(Screen.WalletScreen.route) { // Ensure to create a Wallet screen
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
+        )
+
+        // Transactions Item
+        BottomNavigationItem(
+            icon = {
                 Icon(
                     imageVector = Icons.Filled.Assignment,
                     contentDescription = stringResource(com.example.xpense.R.string.transactions),
@@ -221,29 +219,45 @@ fun BottomBar(navController: NavHostController) {
             label = {
                 Text(text = "Transactions")
             },
-
-
             selectedContentColor = Color(0xFF243D25),
-            unselectedContentColor = Color.White,
+            unselectedContentColor = Color.Gray,
             alwaysShowLabel = false,
             selected = currentRoute == Screen.Transactions.route,
             onClick = {
                 navController.navigate(Screen.Transactions.route) {
-                    // Pop up to the start destination of the graph to
-                    // avoid building up a large stack of destinations
-                    // on the back stack as users select items
                     popUpTo(navController.graph.findStartDestination().id) {
                         saveState = true
                     }
-                    // Avoid multiple copies of the same destination when
-                    // re-selecting the same item
                     launchSingleTop = true
-                    // Restore state when re-selecting a previously selected item
                     restoreState = true
                 }
             }
         )
 
+        // Profile Item (Newly Added at Last)
+        BottomNavigationItem(
+            icon = {
+                Icon(
+                    imageVector = Icons.Filled.Person,
+                    contentDescription = stringResource(com.example.xpense.R.string.profile),
+                )
+            },
+            label = {
+                Text(text = "Profile")
+            },
+            selectedContentColor = Color(0xFF243D25),
+            unselectedContentColor = Color.Gray,
+            alwaysShowLabel = false,
+            selected = currentRoute == Screen.ProfileScreen.route, // Update the route if needed
+            onClick = {
+                navController.navigate(Screen.ProfileScreen.route) { // Ensure to create a Profile screen
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
+        )
     }
-
 }

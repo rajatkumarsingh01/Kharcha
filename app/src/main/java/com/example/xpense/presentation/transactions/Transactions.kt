@@ -1,28 +1,4 @@
-/**
- *
- *	MIT License
- *
- *	Copyright (c) 2023 Gautam Hazarika
- *
- *	Permission is hereby granted, free of charge, to any person obtaining a copy
- *	of this software and associated documentation files (the "Software"), to deal
- *	in the Software without restriction, including without limitation the rights
- *	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *	copies of the Software, and to permit persons to whom the Software is
- *	furnished to do so, subject to the following conditions:
- *
- *	The above copyright notice and this permission notice shall be included in all
- *	copies or substantial portions of the Software.
- *
- *	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *	SOFTWARE.
- *
- **/
+
 
 package com.example.xpense.presentation.transactions
 
@@ -43,17 +19,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.example.xpense.domain.model.Transaction
+import com.example.xpense.domain.repository.TransactionRepository
 import com.example.xpense.presentation.common.components.TransactionCard
 import com.example.xpense.presentation.dashboard.DashboardViewModel
 import com.example.xpense.presentation.util.Screen
+
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -64,7 +47,10 @@ fun Transactions(
 ) {
     Column(
         modifier = Modifier
-            .background(MaterialTheme.colors.primary)
+            .background(
+                Brush.verticalGradient(
+                colors = listOf(Color(0xFF3ABBB9), Color.White)
+            ))
             .fillMaxSize()
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -101,7 +87,7 @@ fun Transactions(
                     },
                     colors = TextFieldDefaults.textFieldColors(
                         textColor = Color.White,
-                        backgroundColor = Color(0xFFD16C97),
+                        backgroundColor = Color(0xFF2A7C76),
                         cursorColor = Color.White,
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent,
@@ -141,7 +127,7 @@ fun Transactions(
             ) {
                 Text(
                     text = "No recent transactions..",
-                    color = Color(0xFFD16C97),
+                    color = Color(0xFF2A7C76),
                 )
             }
 
@@ -163,5 +149,4 @@ fun Transactions(
         }
     }
 }
-
 

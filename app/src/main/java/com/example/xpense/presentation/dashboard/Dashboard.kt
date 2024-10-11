@@ -1,28 +1,4 @@
-/**
- *
- *	MIT License
- *
- *	Copyright (c) 2023 Gautam Hazarika
- *
- *	Permission is hereby granted, free of charge, to any person obtaining a copy
- *	of this software and associated documentation files (the "Software"), to deal
- *	in the Software without restriction, including without limitation the rights
- *	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *	copies of the Software, and to permit persons to whom the Software is
- *	furnished to do so, subject to the following conditions:
- *
- *	The above copyright notice and this permission notice shall be included in all
- *	copies or substantial portions of the Software.
- *
- *	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- *	SOFTWARE.
- *
- **/
+
 
 package com.example.xpense.presentation.dashboard
 
@@ -42,9 +18,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -63,17 +41,38 @@ fun Dashboard(
 
     Column(
         modifier = Modifier
-            .background(MaterialTheme.colors.primary)
+            .background(
+                Brush.verticalGradient(
+                colors = listOf(Color(0xFF3ABBB9), Color.White)
+            ))
             .fillMaxSize()
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(32.dp))
-
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp), // Padding on the sides for alignment
+            horizontalArrangement = Arrangement.SpaceBetween, // Space between name and icon
+            verticalAlignment = Alignment.CenterVertically // Align name and icon vertically
         ) {
+            // Name Column
+            Column {
+                Text(
+                    text = "Good afternoon,",
+                    fontSize = 18.sp,
+                    color = Color.White
+                )
+                Text(
+                    text = "Rajat",
+                    fontSize = 24.sp,
+                    color = Color.White,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+
+            // About Icon
             IconButton(onClick = {
                 navHostController.navigate(Screen.About.route)
             }) {
@@ -84,13 +83,16 @@ fun Dashboard(
                 )
             }
         }
-        Spacer(modifier = Modifier.height(8.dp))
+
+
+        Spacer(modifier = Modifier.height(32.dp))
         Column(
             modifier = Modifier.padding(16.dp, 0.dp)
         ) {
             Card(
                 shape = RoundedCornerShape(16.dp),
-                backgroundColor = Color(0xFFD16C97)
+                backgroundColor = Color(0xFF2A7C76),
+                elevation = 16.dp
             ) {
                 Column(
                     modifier = Modifier
@@ -150,8 +152,15 @@ fun Dashboard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp, 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(text = "Recent Transactions..")
+            Text(text = "Transactions History")
+            TextButton(onClick = {
+                // Handle See all click navigation
+                navHostController.navigate(Screen.Transactions.route)
+            }) {
+                Text(text = "See all", color = Color(0xFF2A7C76))
+            }
         }
 
         if (recentList.list.isEmpty()) {
@@ -161,7 +170,7 @@ fun Dashboard(
             ) {
                 Text(
                     text = "No recent transactions..",
-                    color = Color(0xFFD16C97),
+                    color = Color(0xFF2A7C76),
                 )
             }
 
@@ -225,3 +234,4 @@ fun SummaryMiniCard(
         }
     }
 }
+
